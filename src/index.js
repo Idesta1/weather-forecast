@@ -6,6 +6,7 @@ let descriptionElement = document.querySelector("#description");
 let humidityElement = document.querySelector("#humidity");
 let windSpeedElement = document.querySelector("#wind-speed");
 let temperatureIconElement= document.querySelector("#icon");
+let weatherElement=document.querySelector("#current-time");
 let date = new Date();
 
 temperatureElement.innerHTML=Math.round(temperature);
@@ -17,11 +18,10 @@ temperatureIconElement.innerHTML=`<img src="${response.data.condition.icon_url}"
 weatherElement.innerHTML= formatDate(date);
 
 getForecast("response.data.city");
+
 }
-weatherElement=document.querySelector("#current-time");
 
 function formatDate(date){
-
 let days = [
     "Sunday",
     "Monday",
@@ -43,35 +43,34 @@ let days = [
   return  `${day} ${hours}:${minutes}`;
 }
 
-
 function searchCity(city){
 let apiKey="8e95b71ct703a6fac0458b466ebo4b0b";
 let apiUrl=`https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
 axios.get(apiUrl).then(changeWeather);
 }
+
 function showSubmit(event){
     event.preventDefault();
   let searchInput=document.querySelector("#search-input-app");
 
-   
    searchCity(searchInput.value);
    
 }
-
-function getForecast(city){
+ 
+function getForecast(city) {
  let apiKey = "8e95b71ct703a6fac0458b466ebo4b0b";
  let apiUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=metric`;
-  axios.get(apiUrl).then(displayForecast);
+  axios(apiUrl).then(displayForecast);
 
 }
-
 function displayForecast(response) {
- console.log(response.data);
+  console.log(response.data);
+  
+  let days = ["Tue","Wed","Thu","Fri","Sat"];
+  let forecastHtml = "";
 
-let days = ["Tue","Wed","Thu","Fri","Sat"];
-let forecastHtml = "";
-
-days.forEach(function (day) {
+ 
+ days.forEach(function (day) {
   forecastHtml =
   forecastHtml +
  ` 
@@ -84,7 +83,7 @@ days.forEach(function (day) {
       </div>
     </div>
     `;
-});
+ });
 
 let forecastElement = document.querySelector("#forecast");
 forecastElement.innerHTML = forecastHtml;
@@ -95,6 +94,7 @@ let searchFormElement=document.querySelector("#search-form-app");
 searchFormElement.addEventListener ("submit", showSubmit);
 
 searchCity("city");
+
 
 
 
